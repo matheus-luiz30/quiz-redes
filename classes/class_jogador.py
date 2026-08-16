@@ -15,11 +15,11 @@ class Jogador:
             """, (self.nome,))
 
             conexao.commit()
-            id_gerado = cursor.lastrowid  # pega o id que o AUTOINCREMENT acabou de criar
+            id_gerado = cursor.lastrowid 
             print("Jogador cadastrado com sucesso!")
             return id_gerado
 
-        except sqlite3.IntegrityError as erro:
+        except sqlite3.IntegrityError as erro: # Erro de repetição 'IntegrityError' do sqlite
             print(f"Erro ao cadastrar jogador\n {erro}")
 
         except Exception as erro:

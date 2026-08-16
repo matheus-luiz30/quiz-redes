@@ -43,11 +43,11 @@ class Pergunta:
             perguntas = []
             for linha in linhas:
                 pergunta = Pergunta(
-                    enunciado=linha[1],
-                    alternativas=[linha[2], linha[3], linha[4], linha[5]],
-                    resposta_correta=linha[6],
-                    categoria=linha[7],
-                    dificuldade=linha[8]
+                    enunciado=linha[1],  # "O que é DNS?"
+                    alternativas=[linha[2], linha[3], linha[4], linha[5]], # ["Sistema de Nomes", "Cabo de rede", "Protocolo de email", "Firewall"]
+                    resposta_correta=linha[6], # "a"
+                    categoria=linha[7], # "Redes"
+                    dificuldade=linha[8] # "medio"
                 )
                 perguntas.append(pergunta)
 

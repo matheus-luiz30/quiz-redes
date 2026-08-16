@@ -1,4 +1,4 @@
-from database.iniciar_banco import gerar_banco
+from database.gerar_banco import gerar_banco
 from classes.class_jogador import Jogador
 from classes.class_pergunta import Pergunta
 from servicos.motor_quiz import MotorQuiz

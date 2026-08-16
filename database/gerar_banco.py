@@ -27,5 +27,19 @@ def gerar_banco():
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS perguntas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        enunciado TEXT NOT NULL,
+        alternativa_a TEXT NOT NULL,
+        alternativa_b TEXT NOT NULL,
+        alternativa_c TEXT NOT NULL,
+        alternativa_d TEXT NOT NULL,
+        resposta_correta TEXT NOT NULL,
+        categoria TEXT,
+        dificuldade TEXT DEFAULT 'medio'
+    )
+    """)
+
     conexao.commit()
     conexao.close()

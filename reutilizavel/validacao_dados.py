@@ -12,3 +12,14 @@ def validar_nome():
             continue
 
         return nome_digitado
+
+
+def validar_resposta():
+    while True:
+        resposta_digitada = input("\nSua resposta (a/b/c/d): ").strip().lower()
+
+        if resposta_digitada not in ["a", "b", "c", "d"]:
+            print("Erro: Digite apenas a, b, c ou d.")
+            continue
+
+        return resposta_digitada

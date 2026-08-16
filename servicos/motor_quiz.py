@@ -8,7 +8,7 @@ class MotorQuiz:
 
     comentarios_acerto = [
         "Isso aí! Sua conexão neural rodou sem lag nenhum.",
-        "Resposta certa, sem 404 aqui!",
+        "Resposta certa, sem erro 404 aqui!",
         "Boa! Você tá com o firewall mental afiado hoje.",
         "Acertou! Isso sim é fibra óptica de raciocínio.",
     ]
@@ -17,7 +17,7 @@ class MotorQuiz:
         "Ops, essa resposta caiu na exceção... tenta de novo na próxima!",
         "Erro 403: acesso à resposta certa negado dessa vez.",
         "Quase! Parece que sua conexão teve um pacote perdido aí.",
-        "Não foi dessa vez — recalibra o roteador e bora pra próxima!",
+        "Não foi dessa vez, recalibra o roteador e bora pra próxima!",
     ]
 
     def __init__(self, jogador, perguntas):
