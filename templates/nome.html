@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Redes</title>
+</head>
+<body>
+    <h1>Quiz de Redes</h1>
+    {% if erro %}
+        <p style="color: red;">{{ erro }}</p>
+    {% endif %}
+    <form action="/comecar" method="POST">
+        <label for="nome">Digite seu nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <button type="submit">Começar</button>
+    </form>
+</body>
+</html>

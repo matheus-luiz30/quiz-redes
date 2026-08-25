@@ -14,6 +14,18 @@ def validar_nome():
         return nome_digitado
 
 
+def nome_e_valido(nome):
+    nome_limpo = nome.replace(" ", "")
+
+    if not nome_limpo.isalpha():
+        return False
+
+    if len(nome) < 3 or len(nome) > 20:
+        return False
+
+    return True
+
+
 def validar_resposta():
     while True:
         resposta_digitada = input("\nSua resposta (a/b/c/d): ").strip().lower()

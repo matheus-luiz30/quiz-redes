@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 banco.db
+venv/
+CLAUDE.md

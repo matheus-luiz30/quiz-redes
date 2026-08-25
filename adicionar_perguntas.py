@@ -1,11 +1,11 @@
 from classes.class_pergunta import Pergunta
 
 pergunta = Pergunta(
-    enunciado="O que significa a sigla DNS?",
-    alternativas=["Domain Name System", "Data Network Service", "Digital Node Server", "Direct Network Switch"],
-    resposta_correta="a",
-    categoria="Redes",
-    dificuldade="facil"
+    enunciado="enunciado teste",
+    alternativas=["a", "b", "c", "d"],
+    resposta_correta="d",
+    categoria="teste",
+    dificuldade="dificil"
 )
 
 pergunta.salvar_no_banco()
