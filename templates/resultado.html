@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Redes</title>
+</head>
+<body>
+    <h1>Fim de jogo!</h1>
+    <p>Jogador: {{ nome }}</p>
+    <p>Pontuação desta partida: {{ pontuacao }} | Acertos: {{ acertos }} de {{ total_perguntas }}</p>
+    <p>Tempo total: {{ "%.2f"|format(tempo_total) }}s</p>
+    <p>Perfil: {{ titulo }} | {{ modo }}</p>
+    <p>Pontuação total acumulada: {{ total_pontuacao }} | Acertos totais: {{ total_acertos }}</p>
+</body>
+</html>

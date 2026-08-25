@@ -6,6 +6,7 @@ from app import app
 from classes.class_jogador import Jogador
 from classes.class_pergunta import Pergunta
 from reutilizavel.validacao_dados import nome_e_valido
+from reutilizavel.perfil_jogador import calcular_perfil
 from servicos.motor_quiz import MotorQuiz
 
 
@@ -45,19 +46,26 @@ def pergunta():
 
     if indice >= len(perguntas):
         if not session["resultado_salvo"]:
-            tempo_total = time.time() - session["inicio_tempo"]
+            session["tempo_total"] = time.time() - session["inicio_tempo"]
             Jogador.salvar_resultado(
-                session["jogador_id"], session["pontuacao"], session["acertos"], tempo_total
+                session["jogador_id"], session["pontuacao"], session["acertos"], session["tempo_total"]
             )
             session["resultado_salvo"] = True
 
         total_pontuacao, total_acertos = Jogador.obter_totais(session["jogador_id"])
+        titulo, modo = calcular_perfil(session["acertos"], len(perguntas), session["tempo_total"])
 
-        return (
-            f"Fim de jogo! Pontuação: {session['pontuacao']} | "
-            f"Acertos: {session['acertos']} de {len(perguntas)}<br>"
-            f"Pontuação total acumulada: {total_pontuacao} | "
-            f"Acertos totais: {total_acertos}"
+        return render_template(
+            "resultado.html",
+            nome=session["nome"],
+            pontuacao=session["pontuacao"],
+            acertos=session["acertos"],
+            total_perguntas=len(perguntas),
+            tempo_total=session["tempo_total"],
+            titulo=titulo,
+            modo=modo,
+            total_pontuacao=total_pontuacao,
+            total_acertos=total_acertos,
         )
 
     pergunta_atual = perguntas[indice]
