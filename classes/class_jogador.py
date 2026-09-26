@@ -61,6 +61,30 @@ class Jogador:
                 conexao.close()
 
     @staticmethod
+    def obter_ranking(limite=10):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            cursor.execute("""
+                SELECT jogadores.nome, resultados.pontuacao, resultados.acertos, resultados.tempo_total
+                FROM resultados
+                JOIN jogadores ON jogadores.id = resultados.jogador_id
+                ORDER BY resultados.pontuacao DESC, resultados.tempo_total ASC
+                LIMIT ?
+            """, (limite,))
+
+            return cursor.fetchall()
+
+        except Exception as erro:
+            print(f"Erro inesperado: {erro}")
+            return []
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    @staticmethod
     def salvar_resultado(jogador_id, pontuacao, acertos, tempo_total):
         conexao = None
         try:

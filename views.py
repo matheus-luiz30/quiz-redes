@@ -15,6 +15,12 @@ def index():
     return render_template("nome.html")
 
 
+@app.route("/ranking")
+def ranking():
+    top_resultados = Jogador.obter_ranking(10)
+    return render_template("ranking.html", top_resultados=top_resultados)
+
+
 @app.route("/jogar-novo")
 def jogar_novo():
     session.clear()
