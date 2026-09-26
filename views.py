@@ -53,6 +53,9 @@ def comecar():
 
 @app.route("/pergunta")
 def pergunta():
+    if "jogador_id" not in session:
+        return redirect(url_for("index"))
+
     perguntas = Pergunta.buscar_todas()
     indice = session["pergunta_atual"]
 
@@ -95,10 +98,17 @@ def pergunta():
 
 @app.route("/responder", methods=["POST"])
 def responder():
+    if "jogador_id" not in session:
+        return redirect(url_for("index"))
+
     resposta_escolhida = request.form["resposta"]
 
     perguntas = Pergunta.buscar_todas()
     indice = session["pergunta_atual"]
+
+    if indice >= len(perguntas):
+        return redirect(url_for("pergunta"))
+
     pergunta_atual = perguntas[indice]
 
     jogador = Jogador(session["nome"])
