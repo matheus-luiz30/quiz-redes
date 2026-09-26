@@ -15,6 +15,12 @@ def index():
     return render_template("nome.html")
 
 
+@app.route("/jogar-novo")
+def jogar_novo():
+    session.clear()
+    return redirect(url_for("index"))
+
+
 @app.route("/comecar", methods=["POST"])
 def comecar():
     nome = request.form["nome"].strip()
