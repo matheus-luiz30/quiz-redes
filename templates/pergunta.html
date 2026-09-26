@@ -1,20 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Quiz Redes</title>
-</head>
-<body>
-    <p>Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
+{% extends "base.html" %}
+
+{% block titulo %}Pergunta - Quiz Redes{% endblock %}
+
+{% block conteudo %}
+    <p class="placar">Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
     <h1>{{ pergunta.enunciado }}</h1>
-    <form action="/responder" method="POST">
+    <form action="/responder" method="POST" class="formulario">
         {% for letra, alternativa in alternativas_com_letra %}
-            <div>
+            <div class="alternativa">
                 <input type="radio" id="{{ letra }}" name="resposta" value="{{ letra }}" required>
                 <label for="{{ letra }}">{{ letra }}) {{ alternativa }}</label>
             </div>
         {% endfor %}
         <button type="submit">Responder</button>
     </form>
-</body>
-</html>
+{% endblock %}

@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Quiz Redes</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Resultado - Quiz Redes{% endblock %}
+
+{% block conteudo %}
     <h1>Fim de jogo!</h1>
     <p>Jogador: {{ nome }}</p>
     <p>Pontuação desta partida: {{ pontuacao }} | Acertos: {{ acertos }} de {{ total_perguntas }}</p>
     <p>Tempo total: {{ "%.2f"|format(tempo_total) }}s</p>
-    <p>Perfil: {{ titulo }} | {{ modo }}</p>
+
+    <div class="perfil">
+        <p class="perfil-titulo">{{ titulo }}</p>
+        <p class="perfil-modo">{{ modo }}</p>
+    </div>
+
     <p>Pontuação total acumulada: {{ total_pontuacao }} | Acertos totais: {{ total_acertos }}</p>
-    <a href="/jogar-novo">Jogar de novo</a>
-    <a href="/ranking">Ver ranking</a>
-</body>
-</html>
+
+    <div class="botoes">
+        <a href="/jogar-novo" class="botao">Jogar de novo</a>
+        <a href="/ranking" class="botao">Ver ranking</a>
+    </div>
+{% endblock %}

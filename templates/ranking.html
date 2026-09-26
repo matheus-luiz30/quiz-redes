@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Quiz Redes</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block titulo %}Ranking - Quiz Redes{% endblock %}
+
+{% block conteudo %}
     <h1>Ranking - Top 10</h1>
     {% if top_resultados %}
-        <table border="1" cellpadding="6">
+        <table class="ranking">
             <tr>
                 <th>#</th>
                 <th>Nome</th>
@@ -28,6 +26,5 @@
     {% else %}
         <p>Ainda não há partidas registradas.</p>
     {% endif %}
-    <a href="/">Voltar ao início</a>
-</body>
-</html>
+    <p><a href="/">Voltar ao início</a></p>
+{% endblock %}

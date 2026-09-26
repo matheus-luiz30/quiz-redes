@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Quiz Redes</title>
-</head>
-<body>
-    {% if acertou %}
-        <h1>Acertou!</h1>
-    {% else %}
-        <h1>Errou!</h1>
-    {% endif %}
-    <p>{{ comentario }}</p>
-    <p>Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
-    <a href="/pergunta">Próxima pergunta</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block titulo %}Comentário do host - Quiz Redes{% endblock %}
+
+{% block conteudo %}
+    <div class="comentario {{ 'comentario-acerto' if acertou else 'comentario-erro' }}">
+        {% if acertou %}
+            <h1>Acertou!</h1>
+        {% else %}
+            <h1>Errou!</h1>
+        {% endif %}
+        <p>{{ comentario }}</p>
+    </div>
+    <p class="placar">Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
+    <a href="/pergunta" class="botao">Próxima pergunta</a>
+{% endblock %}
