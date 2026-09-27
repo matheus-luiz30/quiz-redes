@@ -67,10 +67,18 @@ class Jogador:
             conexao = sqlite3.connect("banco.db")
             cursor = conexao.cursor()
             cursor.execute("""
-                SELECT jogadores.nome, resultados.pontuacao, resultados.acertos, resultados.tempo_total
-                FROM resultados
-                JOIN jogadores ON jogadores.id = resultados.jogador_id
-                ORDER BY resultados.pontuacao DESC, resultados.tempo_total ASC
+                SELECT nome, pontuacao, acertos, tempo_total
+                FROM (
+                    SELECT jogadores.nome, resultados.pontuacao, resultados.acertos, resultados.tempo_total,
+                           ROW_NUMBER() OVER (
+                               PARTITION BY resultados.jogador_id
+                               ORDER BY resultados.pontuacao DESC, resultados.tempo_total ASC, resultados.id ASC
+                           ) AS posicao_jogador
+                    FROM resultados
+                    JOIN jogadores ON jogadores.id = resultados.jogador_id
+                )
+                WHERE posicao_jogador = 1
+                ORDER BY pontuacao DESC, tempo_total ASC
                 LIMIT ?
             """, (limite,))
 
