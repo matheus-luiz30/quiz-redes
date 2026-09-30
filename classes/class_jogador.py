@@ -143,16 +143,16 @@ class Jogador:
     # para que cada resposta já tenha um resultado_id ao qual se ligar. No fim do jogo,
     # finalizar_resultado() preenche os valores. tempo_total NULL = partida abandonada.
     @staticmethod
-    def iniciar_resultado(jogador_id, origem):
+    def iniciar_resultado(jogador_id, origem, tentativa):
         conexao = None
         try:
             conexao = sqlite3.connect("banco.db")
             cursor = conexao.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
             cursor.execute("""
-                INSERT INTO resultados (jogador_id, pontuacao, acertos, origem)
-                VALUES (?, 0, 0, ?)
-            """, (jogador_id, origem))
+                INSERT INTO resultados (jogador_id, pontuacao, acertos, origem, tentativa)
+                VALUES (?, 0, 0, ?, ?)
+            """, (jogador_id, origem, tentativa))
 
             conexao.commit()
             return cursor.lastrowid

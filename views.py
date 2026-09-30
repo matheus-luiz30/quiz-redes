@@ -31,9 +31,12 @@ def ranking():
 
 @app.route("/jogar-novo")
 def jogar_novo():
+    # Origem e tentativa sobrevivem ao "Jogar de novo": o resto da session é zerado
     origem = session.get("origem", "direto")
+    tentativa = session.get("tentativa", 0)
     session.clear()
     session["origem"] = origem
+    session["tentativa"] = tentativa
     return redirect(url_for("index"))
 
 
@@ -69,7 +72,12 @@ def comecar():
     jogador_id = jogador.salvar_novo_no_banco()
 
     session["jogador_id"] = jogador_id
-    session["resultado_id"] = Jogador.iniciar_resultado(jogador_id, session.get("origem", "direto"))
+    # Conta cada partida iniciada neste navegador (1 = primeira vez). Quem joga de
+    # novo já conhece as perguntas; a análise pode filtrar por tentativa = 1.
+    session["tentativa"] = session.get("tentativa", 0) + 1
+    session["resultado_id"] = Jogador.iniciar_resultado(
+        jogador_id, session.get("origem", "direto"), session["tentativa"]
+    )
     session["nome"] = nome
     session["pergunta_atual"] = 0
     session["pontuacao"] = 0

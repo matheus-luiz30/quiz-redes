@@ -37,10 +37,12 @@ def gerar_banco():
         tempo_total REAL,
         data_partida DATETIME DEFAULT CURRENT_TIMESTAMP,
         origem TEXT,
+        tentativa INTEGER,
         FOREIGN KEY (jogador_id) REFERENCES jogadores (id)
     )
     """)
     adicionar_coluna_se_faltar(cursor, "resultados", "origem", "TEXT")
+    adicionar_coluna_se_faltar(cursor, "resultados", "tentativa", "INTEGER")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS perguntas (
