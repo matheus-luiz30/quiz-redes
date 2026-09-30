@@ -171,10 +171,17 @@ def responder():
     session["acertos"] += motor.acertos
     session["pergunta_atual"] += 1
 
+    # Ferramenta de estudo: quem errou vê qual era a alternativa certa
+    letras = ["a", "b", "c", "d"]
+    alternativas_por_letra = dict(zip(letras, pergunta_atual.alternativas))
+    letra_correta = pergunta_atual.resposta_correta
+
     return render_template(
         "comentario.html",
         acertou=acertou,
         comentario=comentario,
+        letra_correta=letra_correta,
+        texto_correto=alternativas_por_letra.get(letra_correta, ""),
         pontuacao=session["pontuacao"],
         acertos=session["acertos"],
     )

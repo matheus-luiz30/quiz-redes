@@ -10,6 +10,9 @@
             <h1>Errou!</h1>
         {% endif %}
         <p>{{ comentario }}</p>
+        {% if not acertou %}
+            <p class="resposta-certa">Resposta certa: <strong>{{ letra_correta }}) {{ texto_correto }}</strong></p>
+        {% endif %}
     </div>
     <p class="placar">Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
     <div class="botoes">

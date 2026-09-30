@@ -224,6 +224,14 @@ button:hover,
     color: #b3261e;
 }
 
+.resposta-certa {
+    margin-bottom: 0;
+    padding: 10px 12px;
+    background-color: #ffffff;
+    border-left: 4px solid #2e7d32;
+    border-radius: 4px;
+}
+
 /* ---------- Resultado ---------- */
 
 .perfil {
