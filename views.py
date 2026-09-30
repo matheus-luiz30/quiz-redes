@@ -118,6 +118,11 @@ def responder():
 
     pergunta_atual = perguntas[indice]
 
+    # Envio duplicado (clique duplo, voltar do navegador + reenviar): o formulário
+    # traz o id da pergunta que estava na tela; se não for a atual, ignora.
+    if request.form.get("pergunta_id") != str(pergunta_atual.id):
+        return redirect(url_for("pergunta"))
+
     jogador = Jogador(session["nome"])
     motor = MotorQuiz(jogador, [pergunta_atual])
 

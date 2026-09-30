@@ -6,6 +6,7 @@
     <p class="placar">Pontuação: {{ pontuacao }} | Acertos: {{ acertos }}</p>
     <h1>{{ pergunta.enunciado }}</h1>
     <form action="/responder" method="POST" class="formulario">
+        <input type="hidden" name="pergunta_id" value="{{ pergunta.id }}">
         {% for letra, alternativa in alternativas_com_letra %}
             <div class="alternativa">
                 <input type="radio" id="{{ letra }}" name="resposta" value="{{ letra }}" required>
