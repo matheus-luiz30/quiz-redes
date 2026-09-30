@@ -1,4 +1,4 @@
-import sqlite3
+from database.conexao import conectar
 
 class Pergunta:
     def __init__(self, enunciado, alternativas, resposta_correta, categoria=None, dificuldade="medio", id=None):
@@ -12,7 +12,7 @@ class Pergunta:
     def salvar_no_banco(self):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 INSERT INTO perguntas 
@@ -38,7 +38,7 @@ class Pergunta:
     def salvar_varias_no_banco(perguntas):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             for pergunta in perguntas:
                 cursor.execute("""
@@ -67,7 +67,7 @@ class Pergunta:
     def buscar_todas():
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("SELECT * FROM perguntas")
             linhas = cursor.fetchall()

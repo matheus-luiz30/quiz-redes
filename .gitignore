@@ -4,3 +4,5 @@ banco.db
 venv/
 CLAUDE.md
 exportacoes/
+banco.db-wal
+banco.db-shm

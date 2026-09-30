@@ -1,4 +1,4 @@
-import sqlite3
+from database.conexao import conectar
 
 
 # SQLite não tem "ADD COLUMN IF NOT EXISTS": consulta as colunas da tabela e só
@@ -13,10 +13,15 @@ def adicionar_coluna_se_faltar(cursor, tabela, coluna, tipo):
 
 def gerar_banco():
 
-    conexao = sqlite3.connect("banco.db")
+    conexao = conectar()
     cursor = conexao.cursor()
 
     cursor.execute("PRAGMA foreign_keys = ON")
+
+    # WAL: leituras não bloqueiam gravações (e vice-versa), importante com várias
+    # pessoas jogando ao mesmo tempo no gunicorn. A configuração fica gravada no
+    # próprio banco.db. Obs: o SQLite passa a usar também banco.db-wal e banco.db-shm.
+    cursor.execute("PRAGMA journal_mode = WAL")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS jogadores (

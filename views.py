@@ -13,6 +13,12 @@ from reutilizavel.filtro_apelido import apelido_e_ofensivo
 from servicos.motor_quiz import MotorQuiz
 
 
+@app.before_request
+def tornar_session_permanente():
+    # Usa a duração definida em app.permanent_session_lifetime (app.py)
+    session.permanent = True
+
+
 @app.route("/")
 def index():
     # A origem fica na session (e não só na URL) para sobreviver a um clique no
@@ -35,6 +41,7 @@ def jogar_novo():
     origem = session.get("origem", "direto")
     tentativa = session.get("tentativa", 0)
     session.clear()
+    session.permanent = True
     session["origem"] = origem
     session["tentativa"] = tentativa
     return redirect(url_for("index"))

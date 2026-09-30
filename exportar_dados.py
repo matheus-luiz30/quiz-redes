@@ -13,9 +13,10 @@ import os
 from datetime import datetime
 
 from classes.class_relatorio import Relatorio
+from database.conexao import CAMINHO_BANCO, PASTA_PROJETO
 from reutilizavel.formatacao_csv import formatar_linha
 
-PASTA_EXPORTACOES = "exportacoes"
+PASTA_EXPORTACOES = os.path.join(PASTA_PROJETO, "exportacoes")
 
 
 def salvar_csv(nome_base, carimbo, colunas, linhas):
@@ -31,8 +32,8 @@ def salvar_csv(nome_base, carimbo, colunas, linhas):
 
 
 def main():
-    if not os.path.exists("banco.db"):
-        print("banco.db não encontrado. Rode o script na pasta do projeto.")
+    if not os.path.exists(CAMINHO_BANCO):
+        print(f"Banco não encontrado em {CAMINHO_BANCO}")
         return
 
     os.makedirs(PASTA_EXPORTACOES, exist_ok=True)

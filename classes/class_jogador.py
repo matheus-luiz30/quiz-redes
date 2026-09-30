@@ -1,5 +1,7 @@
 import sqlite3
 
+from database.conexao import conectar
+
 class Jogador:
     def __init__(self, nome, vinculo=None):
         self.nome = nome
@@ -8,7 +10,7 @@ class Jogador:
     def salvar_no_banco(self):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 SELECT id FROM jogadores WHERE nome = ?
@@ -45,7 +47,7 @@ class Jogador:
     def salvar_novo_no_banco(self):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 INSERT INTO jogadores (nome, vinculo)
@@ -66,7 +68,7 @@ class Jogador:
     def obter_totais(jogador_id):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 SELECT COALESCE(SUM(pontuacao), 0), COALESCE(SUM(acertos), 0)
@@ -88,7 +90,7 @@ class Jogador:
     def obter_ranking(limite=10):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 SELECT nome, pontuacao, acertos, tempo_total, resultado_id
@@ -122,7 +124,7 @@ class Jogador:
     def salvar_resultado(jogador_id, pontuacao, acertos, tempo_total):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 INSERT INTO resultados (jogador_id, pontuacao, acertos, tempo_total)
@@ -146,7 +148,7 @@ class Jogador:
     def iniciar_resultado(jogador_id, origem, tentativa):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
             cursor.execute("""
@@ -168,7 +170,7 @@ class Jogador:
     def finalizar_resultado(resultado_id, pontuacao, acertos, tempo_total):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
                 UPDATE resultados
@@ -190,7 +192,7 @@ class Jogador:
     def salvar_resposta(resultado_id, pergunta_id, acertou, tempo_resposta):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
             cursor.execute("""

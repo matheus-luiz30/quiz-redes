@@ -1,4 +1,4 @@
-import sqlite3
+from database.conexao import conectar
 
 # Consultas usadas na exportação para análise estatística. Regras comuns:
 # - só partidas do modo web (origem NULL = modo terminal ou teste antigo, fica de fora)
@@ -13,7 +13,7 @@ class Relatorio:
     def _executar(consulta):
         conexao = None
         try:
-            conexao = sqlite3.connect("banco.db")
+            conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute(consulta)
             linhas = cursor.fetchall()
