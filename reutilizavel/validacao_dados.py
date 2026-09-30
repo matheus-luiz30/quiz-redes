@@ -68,5 +68,21 @@ def vinculo_e_valido(vinculo):
     return vinculo in VINCULOS
 
 
+# Origem do acesso (?origem=instagram, ?origem=qr_errc...). Aceita qualquer código
+# curto em minúsculas, para poder criar canais novos sem mexer no código; sem
+# parâmetro ou com valor estranho, conta como "direto".
+def normalizar_origem(origem):
+    origem = (origem or "").strip().lower()
+
+    if origem == "" or len(origem) > 30:
+        return "direto"
+
+    for caractere in origem:
+        if not (caractere.isascii() and (caractere.isalnum() or caractere in "_-")):
+            return "direto"
+
+    return origem
+
+
 def gerar_apelido_padrao():
     return f"Jogador {random.randint(100, 999)}"

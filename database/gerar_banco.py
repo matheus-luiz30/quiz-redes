@@ -36,9 +36,11 @@ def gerar_banco():
         acertos INTEGER NOT NULL,
         tempo_total REAL,
         data_partida DATETIME DEFAULT CURRENT_TIMESTAMP,
+        origem TEXT,
         FOREIGN KEY (jogador_id) REFERENCES jogadores (id)
     )
     """)
+    adicionar_coluna_se_faltar(cursor, "resultados", "origem", "TEXT")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS perguntas (

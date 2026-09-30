@@ -5,13 +5,20 @@ from flask import render_template, request, session, redirect, url_for
 from app import app
 from classes.class_jogador import Jogador
 from classes.class_pergunta import Pergunta
-from reutilizavel.validacao_dados import VINCULOS, apelido_e_valido, vinculo_e_valido, gerar_apelido_padrao
+from reutilizavel.validacao_dados import (
+    VINCULOS, apelido_e_valido, vinculo_e_valido, gerar_apelido_padrao, normalizar_origem,
+)
 from reutilizavel.perfil_jogador import calcular_perfil
 from servicos.motor_quiz import MotorQuiz
 
 
 @app.route("/")
 def index():
+    # A origem fica na session (e não só na URL) para sobreviver a um clique no
+    # logo, a um erro no formulário e ao "Jogar de novo".
+    if "origem" in request.args:
+        session["origem"] = normalizar_origem(request.args["origem"])
+
     return render_template("nome.html", vinculos=VINCULOS)
 
 
@@ -23,7 +30,9 @@ def ranking():
 
 @app.route("/jogar-novo")
 def jogar_novo():
+    origem = session.get("origem", "direto")
     session.clear()
+    session["origem"] = origem
     return redirect(url_for("index"))
 
 
@@ -58,7 +67,7 @@ def comecar():
     jogador_id = jogador.salvar_novo_no_banco()
 
     session["jogador_id"] = jogador_id
-    session["resultado_id"] = Jogador.iniciar_resultado(jogador_id)
+    session["resultado_id"] = Jogador.iniciar_resultado(jogador_id, session.get("origem", "direto"))
     session["nome"] = nome
     session["pergunta_atual"] = 0
     session["pontuacao"] = 0
