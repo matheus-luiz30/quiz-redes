@@ -8,15 +8,15 @@
                 <th>Apelido</th>
                 <th>Pontos</th>
                 <th>Acertos</th>
-                <th>Tempo (s)</th>
+                <th>Tempo</th>
             </tr>
             {% for nome, pontuacao, acertos, tempo_total, id_partida in top_resultados %}
                 <tr{% if id_partida == resultado_id %} class="linha-destaque"{% endif %}>
                     <td>{{ loop.index }}</td>
-                    <td>{{ nome }}</td>
+                    <td class="col-apelido">{{ nome }}</td>
                     <td>{{ pontuacao }}</td>
                     <td>{{ acertos }}</td>
-                    <td>{{ "%.1f"|format(tempo_total) }}</td>
+                    <td>{{ "%.1f"|format(tempo_total) }}s</td>
                 </tr>
             {% endfor %}
         </table>

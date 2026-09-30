@@ -8,10 +8,10 @@
     <form action="/responder" method="POST" class="formulario">
         <input type="hidden" name="pergunta_id" value="{{ pergunta.id }}">
         {% for letra, alternativa in alternativas_com_letra %}
-            <div class="alternativa">
-                <input type="radio" id="{{ letra }}" name="resposta" value="{{ letra }}" required>
-                <label for="{{ letra }}">{{ letra }}) {{ alternativa }}</label>
-            </div>
+            <label class="alternativa">
+                <input type="radio" name="resposta" value="{{ letra }}" required>
+                <span>{{ letra }}) {{ alternativa }}</span>
+            </label>
         {% endfor %}
         <button type="submit">Responder</button>
     </form>

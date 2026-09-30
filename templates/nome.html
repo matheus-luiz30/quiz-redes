@@ -17,11 +17,11 @@
         <fieldset class="grupo-opcoes">
             <legend>Qual o seu vínculo?</legend>
             {% for codigo, texto in vinculos.items() %}
-                <div class="alternativa">
-                    <input type="radio" id="vinculo_{{ codigo }}" name="vinculo" value="{{ codigo }}"
+                <label class="alternativa">
+                    <input type="radio" name="vinculo" value="{{ codigo }}"
                            {% if vinculo == codigo %}checked{% endif %} required>
-                    <label for="vinculo_{{ codigo }}">{{ texto }}</label>
-                </div>
+                    <span>{{ texto }}</span>
+                </label>
             {% endfor %}
         </fieldset>
 
@@ -33,5 +33,7 @@
 
         <button type="submit">Aceito e quero jogar</button>
     </form>
-    <p><a href="/ranking">Ver ranking</a></p>
+    <div class="botoes">
+        <a href="/ranking" class="botao botao-secundario">Ver ranking</a>
+    </div>
 {% endblock %}

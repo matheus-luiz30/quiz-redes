@@ -1,4 +1,5 @@
-/* Estilo simples do Quiz Redes: sem framework, sem JavaScript. */
+/* Estilo simples do Quiz Redes: sem framework, sem JavaScript.
+   Pensado primeiro para celular (público do evento entra pelo QR code / Instagram). */
 
 * {
     box-sizing: border-box;
@@ -11,6 +12,8 @@ body {
     line-height: 1.5;
     color: #1a1a1a;
     background-color: #f4f6f8;
+    /* palavras longas sem espaço (ex: "IEEE802.11ac") quebram em vez de vazar da tela */
+    overflow-wrap: anywhere;
 }
 
 .cabecalho {
@@ -33,6 +36,12 @@ body {
 
 h1 {
     font-size: 1.6em;
+    line-height: 1.3;
+    color: #0d3b66;
+}
+
+h2 {
+    font-size: 1.25em;
     color: #0d3b66;
 }
 
@@ -41,8 +50,11 @@ a {
 }
 
 .erro {
+    padding: 10px 12px;
     color: #b3261e;
     font-weight: bold;
+    background-color: #fbeaea;
+    border-radius: 4px;
 }
 
 .placar {
@@ -50,70 +62,137 @@ a {
     color: #333333;
 }
 
+/* ---------- Formulários ---------- */
+
 .formulario {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 320px;
 }
 
-.formulario label {
+.formulario > label:not(.alternativa) {
     font-weight: bold;
 }
 
 .formulario input[type="text"] {
-    padding: 10px;
-    font-size: 1em;
+    min-height: 48px;
+    padding: 10px 12px;
+    font-size: 1em; /* >= 16px evita o zoom automático do iPhone ao tocar no campo */
     border: 1px solid #b0b8c1;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
-button {
-    padding: 12px 20px;
-    font-size: 1em;
-    color: #ffffff;
-    background-color: #0d3b66;
+.dica {
+    margin: -6px 0 4px;
+    font-size: 0.85em;
+    color: #555555;
+}
+
+.grupo-opcoes {
+    margin: 0;
+    padding: 0;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-button:hover {
-    background-color: #145088;
+.grupo-opcoes legend {
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
+/* Alternativa = cartão inteiro clicável (o <label> envolve o rádio e o texto) */
 .alternativa {
-    padding: 10px;
-    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    border: 2px solid #d8dee4;
+    border-radius: 8px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.alternativa input[type="radio"] {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: #0d3b66;
+}
+
+/* Destaque da opção escolhida, sem JavaScript */
+.alternativa:has(input:checked) {
+    border-color: #0d3b66;
+    background-color: #e8f0f8;
+}
+
+.alternativa input:checked + span {
+    font-weight: bold;
+}
+
+.consentimento {
+    padding: 12px;
+    font-size: 0.9em;
     background-color: #ffffff;
     border: 1px solid #d8dee4;
+    border-left: 6px solid #0d3b66;
     border-radius: 4px;
 }
 
-.alternativa label {
-    margin-left: 8px;
+.consentimento p {
+    margin: 0;
+}
+
+/* ---------- Botões ---------- */
+
+button,
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 12px 22px;
+    font-family: inherit;
+    font-size: 1.05em;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    background-color: #0d3b66;
+    border: 2px solid #0d3b66;
+    border-radius: 8px;
+    cursor: pointer;
+    touch-action: manipulation;
 }
 
 .botao {
-    display: inline-block;
-    padding: 12px 20px;
-    margin-top: 10px;
     color: #ffffff !important;
-    background-color: #0d3b66;
-    border-radius: 4px;
-    text-decoration: none;
 }
 
+button:hover,
 .botao:hover {
     background-color: #145088;
+}
+
+.botao-secundario {
+    color: #0d3b66 !important;
+    background-color: #ffffff;
+}
+
+.botao-secundario:hover {
+    background-color: #e8f0f8;
 }
 
 .botoes {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 16px;
+    margin-top: 20px;
 }
+
+/* ---------- Comentário do host ---------- */
 
 .comentario {
     padding: 18px;
@@ -145,6 +224,8 @@ button:hover {
     color: #b3261e;
 }
 
+/* ---------- Resultado ---------- */
+
 .perfil {
     padding: 18px;
     margin: 16px 0;
@@ -167,6 +248,12 @@ button:hover {
     color: #7a5c00;
 }
 
+/* ---------- Ranking ---------- */
+
+.tabela-rolagem {
+    overflow-x: auto;
+}
+
 table.ranking {
     width: 100%;
     border-collapse: collapse;
@@ -178,6 +265,15 @@ table.ranking td {
     padding: 10px;
     border: 1px solid #d8dee4;
     text-align: left;
+    overflow-wrap: normal;
+    white-space: nowrap;
+}
+
+/* Só a coluna do apelido pode quebrar linha (apelidos de até 20 caracteres) */
+table.ranking td.col-apelido {
+    width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 table.ranking th {
@@ -185,59 +281,47 @@ table.ranking th {
     color: #ffffff;
 }
 
-/* Celular: reduz o espaçamento lateral */
-@media (max-width: 480px) {
-    .conteudo {
-        padding: 16px 12px 32px;
-    }
-
-    body {
-        font-size: 17px;
-    }
-}
-
-/* Tela inicial: apelido, vínculo e consentimento */
-.dica {
-    margin: -6px 0 4px;
-    font-size: 0.85em;
-    color: #555555;
-}
-
-.grupo-opcoes {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.grupo-opcoes legend {
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-.consentimento {
-    padding: 12px;
-    font-size: 0.9em;
-    background-color: #ffffff;
-    border: 1px solid #d8dee4;
-    border-left: 6px solid #0d3b66;
-    border-radius: 4px;
-}
-
-.consentimento p {
-    margin: 0;
-}
-
-/* Ranking: destaca a partida de quem acabou de jogar */
-h2 {
-    font-size: 1.25em;
-    color: #0d3b66;
-}
-
+/* Destaca a partida de quem acabou de jogar */
 table.ranking tr.linha-destaque td {
     font-weight: bold;
     background-color: #fff4d6;
 }
 
-.tabela-rolagem {
-    overflow-x: auto;
+/* ---------- Celular ---------- */
+
+@media (max-width: 480px) {
+    body {
+        font-size: 17px;
+    }
+
+    .cabecalho {
+        padding: 12px 16px;
+    }
+
+    .conteudo {
+        padding: 16px 14px 32px;
+    }
+
+    h1 {
+        font-size: 1.3em;
+    }
+
+    /* Botões ocupam a largura toda, um embaixo do outro: mais fácil de acertar com o dedo */
+    .botoes {
+        flex-direction: column;
+    }
+
+    .botoes .botao {
+        width: 100%;
+    }
+
+    /* Tabela cabe em 360px: menos espaço interno e fonte um pouco menor */
+    table.ranking {
+        font-size: 0.85em;
+    }
+
+    table.ranking th,
+    table.ranking td {
+        padding: 8px 5px;
+    }
 }
