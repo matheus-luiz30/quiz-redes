@@ -1,7 +1,8 @@
 import sqlite3
 
 class Pergunta:
-    def __init__(self, enunciado, alternativas, resposta_correta, categoria=None, dificuldade="medio"):
+    def __init__(self, enunciado, alternativas, resposta_correta, categoria=None, dificuldade="medio", id=None):
+        self.id = id  # None até vir do banco (buscar_todas preenche)
         self.enunciado = enunciado
         self.alternativas = alternativas  # lista: ["Ethernet", "Wi-Fi", "Fibra Óptica", "Bluetooth"]
         self.resposta_correta = resposta_correta
@@ -47,7 +48,8 @@ class Pergunta:
                     alternativas=[linha[2], linha[3], linha[4], linha[5]], # ["Sistema de Nomes", "Cabo de rede", "Protocolo de email", "Firewall"]
                     resposta_correta=linha[6], # "a"
                     categoria=linha[7], # "Redes"
-                    dificuldade=linha[8] # "medio"
+                    dificuldade=linha[8], # "medio"
+                    id=linha[0]
                 )
                 perguntas.append(pergunta)
 

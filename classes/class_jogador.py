@@ -76,6 +76,7 @@ class Jogador:
                            ) AS posicao_jogador
                     FROM resultados
                     JOIN jogadores ON jogadores.id = resultados.jogador_id
+                    WHERE resultados.tempo_total IS NOT NULL
                 )
                 WHERE posicao_jogador = 1
                 ORDER BY pontuacao DESC, tempo_total ASC
@@ -105,6 +106,74 @@ class Jogador:
 
             conexao.commit()
             print("Resultado salvo com sucesso!")
+
+        except Exception as erro:
+            print(f"Erro inesperado: {erro}")
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    # Modo web: a partida é criada no início (pontuacao/acertos zerados, tempo_total NULL)
+    # para que cada resposta já tenha um resultado_id ao qual se ligar. No fim do jogo,
+    # finalizar_resultado() preenche os valores. tempo_total NULL = partida abandonada.
+    @staticmethod
+    def iniciar_resultado(jogador_id):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute("""
+                INSERT INTO resultados (jogador_id, pontuacao, acertos)
+                VALUES (?, 0, 0)
+            """, (jogador_id,))
+
+            conexao.commit()
+            return cursor.lastrowid
+
+        except Exception as erro:
+            print(f"Erro inesperado: {erro}")
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    @staticmethod
+    def finalizar_resultado(resultado_id, pontuacao, acertos, tempo_total):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            cursor.execute("""
+                UPDATE resultados
+                SET pontuacao = ?, acertos = ?, tempo_total = ?
+                WHERE id = ?
+            """, (pontuacao, acertos, tempo_total, resultado_id))
+
+            conexao.commit()
+            print("Resultado salvo com sucesso!")
+
+        except Exception as erro:
+            print(f"Erro inesperado: {erro}")
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    @staticmethod
+    def salvar_resposta(resultado_id, pergunta_id, acertou, tempo_resposta):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute("""
+                INSERT INTO resultado_perguntas (resultado_id, pergunta_id, acertou, tempo_resposta)
+                VALUES (?, ?, ?, ?)
+            """, (resultado_id, pergunta_id, int(acertou), tempo_resposta))
+
+            conexao.commit()
 
         except Exception as erro:
             print(f"Erro inesperado: {erro}")

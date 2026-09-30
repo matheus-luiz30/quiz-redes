@@ -41,6 +41,7 @@ def comecar():
     jogador_id = jogador.salvar_no_banco()
 
     session["jogador_id"] = jogador_id
+    session["resultado_id"] = Jogador.iniciar_resultado(jogador_id)
     session["nome"] = nome
     session["pergunta_atual"] = 0
     session["pontuacao"] = 0
@@ -53,7 +54,7 @@ def comecar():
 
 @app.route("/pergunta")
 def pergunta():
-    if "jogador_id" not in session:
+    if "resultado_id" not in session:
         return redirect(url_for("index"))
 
     perguntas = Pergunta.buscar_todas()
@@ -62,8 +63,8 @@ def pergunta():
     if indice >= len(perguntas):
         if not session["resultado_salvo"]:
             session["tempo_total"] = time.time() - session["inicio_tempo"]
-            Jogador.salvar_resultado(
-                session["jogador_id"], session["pontuacao"], session["acertos"], session["tempo_total"]
+            Jogador.finalizar_resultado(
+                session["resultado_id"], session["pontuacao"], session["acertos"], session["tempo_total"]
             )
             session["resultado_salvo"] = True
 
@@ -83,6 +84,12 @@ def pergunta():
             total_acertos=total_acertos,
         )
 
+    # Só reinicia o cronômetro quando a pergunta muda: recarregar a página (F5)
+    # não zera o tempo de resposta.
+    if session.get("indice_cronometrado") != indice:
+        session["indice_cronometrado"] = indice
+        session["inicio_pergunta"] = time.time()
+
     pergunta_atual = perguntas[indice]
     letras = ["a", "b", "c", "d"]
     alternativas_com_letra = list(zip(letras, pergunta_atual.alternativas))
@@ -98,7 +105,7 @@ def pergunta():
 
 @app.route("/responder", methods=["POST"])
 def responder():
-    if "jogador_id" not in session:
+    if "resultado_id" not in session:
         return redirect(url_for("index"))
 
     resposta_escolhida = request.form["resposta"]
@@ -116,6 +123,9 @@ def responder():
 
     acertou = motor.verificar_resposta(pergunta_atual, resposta_escolhida)
     comentario = motor.comentar_host(acertou)
+
+    tempo_resposta = time.time() - session.get("inicio_pergunta", session["inicio_tempo"])
+    Jogador.salvar_resposta(session["resultado_id"], pergunta_atual.id, acertou, tempo_resposta)
 
     session["pontuacao"] += motor.pontuacao
     session["acertos"] += motor.acertos

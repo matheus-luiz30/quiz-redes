@@ -41,5 +41,17 @@ def gerar_banco():
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS resultado_perguntas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        resultado_id INTEGER NOT NULL,
+        pergunta_id INTEGER NOT NULL,
+        acertou INTEGER NOT NULL CHECK (acertou IN (0, 1)),
+        tempo_resposta REAL,
+        FOREIGN KEY (resultado_id) REFERENCES resultados (id),
+        FOREIGN KEY (pergunta_id) REFERENCES perguntas (id)
+    )
+    """)
+
     conexao.commit()
     conexao.close()
