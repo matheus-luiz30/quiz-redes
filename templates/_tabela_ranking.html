@@ -1,0 +1,26 @@
+{# Tabela do top 10, usada em ranking.html e resultado.html.
+   Se resultado_id vier preenchido, a partida do jogador atual fica destacada. #}
+{% if top_resultados %}
+    <div class="tabela-rolagem">
+        <table class="ranking">
+            <tr>
+                <th>#</th>
+                <th>Apelido</th>
+                <th>Pontos</th>
+                <th>Acertos</th>
+                <th>Tempo (s)</th>
+            </tr>
+            {% for nome, pontuacao, acertos, tempo_total, id_partida in top_resultados %}
+                <tr{% if id_partida == resultado_id %} class="linha-destaque"{% endif %}>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ nome }}</td>
+                    <td>{{ pontuacao }}</td>
+                    <td>{{ acertos }}</td>
+                    <td>{{ "%.1f"|format(tempo_total) }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+    <p>Ainda não há partidas registradas.</p>
+{% endif %}

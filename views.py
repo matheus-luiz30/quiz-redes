@@ -9,6 +9,7 @@ from reutilizavel.validacao_dados import (
     VINCULOS, apelido_e_valido, vinculo_e_valido, gerar_apelido_padrao, normalizar_origem,
 )
 from reutilizavel.perfil_jogador import calcular_perfil
+from reutilizavel.filtro_apelido import apelido_e_ofensivo
 from servicos.motor_quiz import MotorQuiz
 
 
@@ -59,7 +60,8 @@ def comecar():
             erro="Escolha o seu vínculo para começar.",
         )
 
-    if apelido == "":
+    # Apelido ofensivo não gera erro na tela: troca em silêncio pelo padrão
+    if apelido == "" or apelido_e_ofensivo(apelido):
         apelido = gerar_apelido_padrao()
 
     nome = apelido
@@ -94,7 +96,6 @@ def pergunta():
             )
             session["resultado_salvo"] = True
 
-        total_pontuacao, total_acertos = Jogador.obter_totais(session["jogador_id"])
         titulo, modo = calcular_perfil(session["acertos"], len(perguntas), session["tempo_total"])
 
         return render_template(
@@ -106,8 +107,8 @@ def pergunta():
             tempo_total=session["tempo_total"],
             titulo=titulo,
             modo=modo,
-            total_pontuacao=total_pontuacao,
-            total_acertos=total_acertos,
+            top_resultados=Jogador.obter_ranking(10),
+            resultado_id=session["resultado_id"],
         )
 
     # Só reinicia o cronômetro quando a pergunta muda: recarregar a página (F5)

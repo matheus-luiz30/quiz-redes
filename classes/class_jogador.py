@@ -91,9 +91,10 @@ class Jogador:
             conexao = sqlite3.connect("banco.db")
             cursor = conexao.cursor()
             cursor.execute("""
-                SELECT nome, pontuacao, acertos, tempo_total
+                SELECT nome, pontuacao, acertos, tempo_total, resultado_id
                 FROM (
                     SELECT jogadores.nome, resultados.pontuacao, resultados.acertos, resultados.tempo_total,
+                           resultados.id AS resultado_id,
                            ROW_NUMBER() OVER (
                                PARTITION BY resultados.jogador_id
                                ORDER BY resultados.pontuacao DESC, resultados.tempo_total ASC, resultados.id ASC

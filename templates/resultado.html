@@ -5,7 +5,7 @@
 {% block conteudo %}
     <h1>Fim de jogo!</h1>
     <p>Jogador: {{ nome }}</p>
-    <p>Pontuação desta partida: {{ pontuacao }} | Acertos: {{ acertos }} de {{ total_perguntas }}</p>
+    <p>Pontuação: {{ pontuacao }} | Acertos: {{ acertos }} de {{ total_perguntas }}</p>
     <p>Tempo total: {{ "%.2f"|format(tempo_total) }}s</p>
 
     <div class="perfil">
@@ -13,7 +13,8 @@
         <p class="perfil-modo">{{ modo }}</p>
     </div>
 
-    <p>Pontuação total acumulada: {{ total_pontuacao }} | Acertos totais: {{ total_acertos }}</p>
+    <h2>Top 10</h2>
+    {% include "_tabela_ranking.html" %}
 
     <div class="botoes">
         <a href="/jogar-novo" class="botao">Jogar de novo</a>

@@ -4,27 +4,6 @@
 
 {% block conteudo %}
     <h1>Ranking - Top 10</h1>
-    {% if top_resultados %}
-        <table class="ranking">
-            <tr>
-                <th>#</th>
-                <th>Nome</th>
-                <th>Pontuação</th>
-                <th>Acertos</th>
-                <th>Tempo (s)</th>
-            </tr>
-            {% for nome, pontuacao, acertos, tempo_total in top_resultados %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ nome }}</td>
-                    <td>{{ pontuacao }}</td>
-                    <td>{{ acertos }}</td>
-                    <td>{{ "%.2f"|format(tempo_total) }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Ainda não há partidas registradas.</p>
-    {% endif %}
+    {% include "_tabela_ranking.html" %}
     <p><a href="/">Voltar ao início</a></p>
 {% endblock %}

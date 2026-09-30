@@ -226,3 +226,18 @@ table.ranking th {
 .consentimento p {
     margin: 0;
 }
+
+/* Ranking: destaca a partida de quem acabou de jogar */
+h2 {
+    font-size: 1.25em;
+    color: #0d3b66;
+}
+
+table.ranking tr.linha-destaque td {
+    font-weight: bold;
+    background-color: #fff4d6;
+}
+
+.tabela-rolagem {
+    overflow-x: auto;
+}
