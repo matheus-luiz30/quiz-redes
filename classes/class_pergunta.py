@@ -32,6 +32,37 @@ class Pergunta:
             if conexao:
                 conexao.close()
 
+    # Cadastro em lote: uma única conexão e um único commit. Se qualquer INSERT
+    # falhar, o rollback desfaz todos — ou entram todas as perguntas, ou nenhuma.
+    @staticmethod
+    def salvar_varias_no_banco(perguntas):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            for pergunta in perguntas:
+                cursor.execute("""
+                    INSERT INTO perguntas
+                    (enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, resposta_correta, categoria, dificuldade)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (pergunta.enunciado, pergunta.alternativas[0], pergunta.alternativas[1],
+                      pergunta.alternativas[2], pergunta.alternativas[3], pergunta.resposta_correta,
+                      pergunta.categoria, pergunta.dificuldade))
+
+            conexao.commit()
+            print(f"{len(perguntas)} perguntas cadastradas com sucesso!")
+            return True
+
+        except Exception as erro:
+            if conexao:
+                conexao.rollback()
+            print(f"Ocorreu um erro inesperado, nenhuma pergunta foi salva: {erro}")
+            return False
+
+        finally:
+            if conexao:
+                conexao.close()
+
     @staticmethod
     def buscar_todas():
         conexao = None
