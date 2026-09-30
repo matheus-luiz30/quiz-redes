@@ -5,14 +5,14 @@ from flask import render_template, request, session, redirect, url_for
 from app import app
 from classes.class_jogador import Jogador
 from classes.class_pergunta import Pergunta
-from reutilizavel.validacao_dados import nome_e_valido
+from reutilizavel.validacao_dados import VINCULOS, apelido_e_valido, vinculo_e_valido, gerar_apelido_padrao
 from reutilizavel.perfil_jogador import calcular_perfil
 from servicos.motor_quiz import MotorQuiz
 
 
 @app.route("/")
 def index():
-    return render_template("nome.html")
+    return render_template("nome.html", vinculos=VINCULOS)
 
 
 @app.route("/ranking")
@@ -29,16 +29,33 @@ def jogar_novo():
 
 @app.route("/comecar", methods=["POST"])
 def comecar():
-    nome = request.form["nome"].strip()
+    apelido = request.form.get("apelido", "").strip()
+    vinculo = request.form.get("vinculo", "")
 
-    if not nome_e_valido(nome):
+    if not apelido_e_valido(apelido):
         return render_template(
             "nome.html",
-            erro="Nome inválido: use só letras, entre 3 e 20 caracteres.",
+            vinculos=VINCULOS,
+            apelido=apelido,
+            vinculo=vinculo,
+            erro="Apelido inválido: use de 2 a 20 letras, números, espaço, _ - ou ponto.",
         )
 
-    jogador = Jogador(nome)
-    jogador_id = jogador.salvar_no_banco()
+    if not vinculo_e_valido(vinculo):
+        return render_template(
+            "nome.html",
+            vinculos=VINCULOS,
+            apelido=apelido,
+            vinculo=vinculo,
+            erro="Escolha o seu vínculo para começar.",
+        )
+
+    if apelido == "":
+        apelido = gerar_apelido_padrao()
+
+    nome = apelido
+    jogador = Jogador(nome, vinculo)
+    jogador_id = jogador.salvar_novo_no_banco()
 
     session["jogador_id"] = jogador_id
     session["resultado_id"] = Jogador.iniciar_resultado(jogador_id)

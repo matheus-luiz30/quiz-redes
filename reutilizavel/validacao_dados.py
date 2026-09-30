@@ -1,3 +1,6 @@
+import random
+
+
 def validar_nome():
     while True:
         nome_digitado = input("Digite seu nome: ").strip()
@@ -35,3 +38,35 @@ def validar_resposta():
             continue
 
         return resposta_digitada
+
+# Modo web (público externo): código salvo no banco -> texto mostrado na tela.
+# Códigos curtos facilitam a análise estatística depois.
+VINCULOS = {
+    "estudante_ufsm": "Estudante UFSM",
+    "estudante_outra": "Estudante de outra instituição",
+    "profissional": "Profissional da área",
+    "outro": "Outro",
+}
+
+
+def apelido_e_valido(apelido):
+    # Vazio é permitido (o sistema gera um apelido padrão)
+    if apelido == "":
+        return True
+
+    if len(apelido) < 2 or len(apelido) > 20:
+        return False
+
+    for caractere in apelido:
+        if not (caractere.isalnum() or caractere in " _-."):
+            return False
+
+    return True
+
+
+def vinculo_e_valido(vinculo):
+    return vinculo in VINCULOS
+
+
+def gerar_apelido_padrao():
+    return f"Jogador {random.randint(100, 999)}"

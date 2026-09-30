@@ -195,3 +195,34 @@ table.ranking th {
         font-size: 17px;
     }
 }
+
+/* Tela inicial: apelido, vínculo e consentimento */
+.dica {
+    margin: -6px 0 4px;
+    font-size: 0.85em;
+    color: #555555;
+}
+
+.grupo-opcoes {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.grupo-opcoes legend {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.consentimento {
+    padding: 12px;
+    font-size: 0.9em;
+    background-color: #ffffff;
+    border: 1px solid #d8dee4;
+    border-left: 6px solid #0d3b66;
+    border-radius: 4px;
+}
+
+.consentimento p {
+    margin: 0;
+}

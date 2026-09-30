@@ -4,13 +4,34 @@
 
 {% block conteudo %}
     <h1>Bem-vindo ao Quiz de Redes!</h1>
+    <p>Responda perguntas sobre redes de computadores e veja seu perfil no final.</p>
     {% if erro %}
         <p class="erro">{{ erro }}</p>
     {% endif %}
     <form action="/comecar" method="POST" class="formulario">
-        <label for="nome">Digite seu nome:</label>
-        <input type="text" id="nome" name="nome" required>
-        <button type="submit">Começar</button>
+        <label for="apelido">Apelido (opcional):</label>
+        <input type="text" id="apelido" name="apelido" maxlength="20" value="{{ apelido or '' }}"
+               placeholder="Deixe vazio para ser &quot;Jogador 123&quot;">
+        <p class="dica">Aparece no ranking. Não use seu nome completo.</p>
+
+        <fieldset class="grupo-opcoes">
+            <legend>Qual o seu vínculo?</legend>
+            {% for codigo, texto in vinculos.items() %}
+                <div class="alternativa">
+                    <input type="radio" id="vinculo_{{ codigo }}" name="vinculo" value="{{ codigo }}"
+                           {% if vinculo == codigo %}checked{% endif %} required>
+                    <label for="vinculo_{{ codigo }}">{{ texto }}</label>
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <div class="consentimento">
+            <p>A participação é anônima. As respostas são usadas apenas de forma agregada,
+               em uma atividade acadêmica de Estatística na UFSM. Não pedimos nome, e-mail
+               nem qualquer dado que identifique você.</p>
+        </div>
+
+        <button type="submit">Aceito e quero jogar</button>
     </form>
     <p><a href="/ranking">Ver ranking</a></p>
 {% endblock %}

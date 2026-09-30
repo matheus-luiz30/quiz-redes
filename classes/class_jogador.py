@@ -1,8 +1,9 @@
 import sqlite3
 
 class Jogador:
-    def __init__(self, nome):
+    def __init__(self, nome, vinculo=None):
         self.nome = nome
+        self.vinculo = vinculo  # só o modo web preenche; terminal grava NULL
 
     def salvar_no_banco(self):
         conexao = None
@@ -30,6 +31,29 @@ class Jogador:
 
         except sqlite3.IntegrityError as erro: # Erro de repetição 'IntegrityError' do sqlite
             print(f"Erro ao cadastrar jogador\n {erro}")
+
+        except Exception as erro:
+            print(f"Ocorreu um erro inesperado: {erro}")
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    # Modo web: sempre cria um jogador novo por partida, porque apelidos se repetem
+    # entre pessoas diferentes e cada uma tem seu vínculo. (O terminal continua
+    # usando salvar_no_banco, que reaproveita pelo nome.)
+    def salvar_novo_no_banco(self):
+        conexao = None
+        try:
+            conexao = sqlite3.connect("banco.db")
+            cursor = conexao.cursor()
+            cursor.execute("""
+                INSERT INTO jogadores (nome, vinculo)
+                VALUES (?, ?)
+            """, (self.nome, self.vinculo))
+
+            conexao.commit()
+            return cursor.lastrowid
 
         except Exception as erro:
             print(f"Ocorreu um erro inesperado: {erro}")
