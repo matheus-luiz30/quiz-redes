@@ -150,7 +150,11 @@ def responder():
     if "resultado_id" not in session:
         return redirect(url_for("index"))
 
-    resposta_escolhida = request.form["resposta"]
+    # A letra vai para o banco (resposta_dada): não confia no formulário, que pode
+    # ter sido adulterado ou chegado sem o campo.
+    resposta_escolhida = request.form.get("resposta", "").strip().lower()
+    if resposta_escolhida not in ["a", "b", "c", "d"]:
+        return redirect(url_for("pergunta"))
 
     perguntas = Pergunta.buscar_todas()
     indice = session["pergunta_atual"]
@@ -172,7 +176,9 @@ def responder():
     comentario = motor.comentar_host(acertou)
 
     tempo_resposta = time.time() - session.get("inicio_pergunta", session["inicio_tempo"])
-    Jogador.salvar_resposta(session["resultado_id"], pergunta_atual.id, acertou, tempo_resposta)
+    Jogador.salvar_resposta(
+        session["resultado_id"], pergunta_atual.id, resposta_escolhida, acertou, tempo_resposta
+    )
 
     session["pontuacao"] += motor.pontuacao
     session["acertos"] += motor.acertos

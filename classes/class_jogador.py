@@ -189,16 +189,17 @@ class Jogador:
                 conexao.close()
 
     @staticmethod
-    def salvar_resposta(resultado_id, pergunta_id, acertou, tempo_resposta):
+    def salvar_resposta(resultado_id, pergunta_id, resposta_dada, acertou, tempo_resposta):
         conexao = None
         try:
             conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
             cursor.execute("""
-                INSERT INTO resultado_perguntas (resultado_id, pergunta_id, acertou, tempo_resposta)
-                VALUES (?, ?, ?, ?)
-            """, (resultado_id, pergunta_id, int(acertou), tempo_resposta))
+                INSERT INTO resultado_perguntas
+                    (resultado_id, pergunta_id, resposta_dada, acertou, tempo_resposta, data_hora)
+                VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """, (resultado_id, pergunta_id, resposta_dada, int(acertou), tempo_resposta))
 
             conexao.commit()
 

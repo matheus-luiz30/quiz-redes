@@ -70,10 +70,16 @@ def gerar_banco():
         pergunta_id INTEGER NOT NULL,
         acertou INTEGER NOT NULL CHECK (acertou IN (0, 1)),
         tempo_resposta REAL,
+        resposta_dada TEXT,
+        data_hora DATETIME,
         FOREIGN KEY (resultado_id) REFERENCES resultados (id),
         FOREIGN KEY (pergunta_id) REFERENCES perguntas (id)
     )
     """)
+    # data_hora sem DEFAULT: o ALTER TABLE do SQLite não aceita CURRENT_TIMESTAMP
+    # como default. Quem preenche é o INSERT em Jogador.salvar_resposta (UTC).
+    adicionar_coluna_se_faltar(cursor, "resultado_perguntas", "resposta_dada", "TEXT")
+    adicionar_coluna_se_faltar(cursor, "resultado_perguntas", "data_hora", "DATETIME")
 
     conexao.commit()
     conexao.close()
