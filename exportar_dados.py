@@ -7,6 +7,9 @@
 #   respostas_AAAA-MM-DD_HH-MM-SS.csv  -> uma linha por resposta dada
 #   partidas_AAAA-MM-DD_HH-MM-SS.csv   -> uma linha por partida
 #
+# Partidas de menores de 18 anos (faixa_etaria = menor_18) não entram em nenhum
+# dos dois arquivos; o terminal só mostra quantas foram deixadas de fora.
+#
 # No Python: pandas.read_csv(arquivo, sep=";", decimal=",", encoding="utf-8-sig")
 import csv
 import os
@@ -14,6 +17,7 @@ from datetime import datetime
 
 from classes.class_relatorio import Relatorio
 from database.conexao import CAMINHO_BANCO, PASTA_PROJETO
+from database.gerar_banco import gerar_banco
 from reutilizavel.formatacao_csv import formatar_linha
 
 PASTA_EXPORTACOES = os.path.join(PASTA_PROJETO, "exportacoes")
@@ -36,6 +40,8 @@ def main():
         print(f"Banco não encontrado em {CAMINHO_BANCO}")
         return
 
+    gerar_banco()  # garante as colunas novas (faixa_etaria, resposta_dada...) sem apagar nada
+
     os.makedirs(PASTA_EXPORTACOES, exist_ok=True)
     carimbo = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
@@ -44,6 +50,11 @@ def main():
 
     colunas, linhas = Relatorio.buscar_partidas()
     salvar_csv("partidas", carimbo, colunas, linhas)
+
+    partidas_menores, respostas_menores = Relatorio.contar_excluidos_menores()
+    if partidas_menores is not None:
+        print(f"Excluídas por serem de menores de 18: {partidas_menores} partida(s), "
+              f"{respostas_menores} resposta(s)")
 
 
 if __name__ == "__main__":
