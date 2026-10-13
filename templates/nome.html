@@ -25,10 +25,22 @@
             {% endfor %}
         </fieldset>
 
+        <fieldset class="grupo-opcoes">
+            <legend>Qual a sua faixa etária?</legend>
+            {% for codigo, texto in faixas_etarias.items() %}
+                <label class="alternativa">
+                    <input type="radio" name="faixa_etaria" value="{{ codigo }}"
+                           {% if faixa_etaria == codigo %}checked{% endif %} required>
+                    <span>{{ texto }}</span>
+                </label>
+            {% endfor %}
+        </fieldset>
+
         <div class="consentimento">
-            <p>A participação é anônima. As respostas são usadas apenas de forma agregada,
+            <p>A participação é voluntária e anônima. As respostas são usadas apenas de forma agregada,
                em uma atividade acadêmica de Estatística na UFSM. Não pedimos nome, e-mail
-               nem qualquer dado que identifique você.</p>
+               nem qualquer dado que identifique você. Dados de menores de 18 anos não são
+               usados na pesquisa.</p>
         </div>
 
         <button type="submit">Aceito e quero jogar</button>

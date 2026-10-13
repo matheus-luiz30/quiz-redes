@@ -28,10 +28,12 @@ def gerar_banco():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-        vinculo TEXT
+        vinculo TEXT,
+        faixa_etaria TEXT
     )
     """)
     adicionar_coluna_se_faltar(cursor, "jogadores", "vinculo", "TEXT")
+    adicionar_coluna_se_faltar(cursor, "jogadores", "faixa_etaria", "TEXT")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS resultados (

@@ -6,7 +6,8 @@ from app import app
 from classes.class_jogador import Jogador
 from classes.class_pergunta import Pergunta
 from reutilizavel.validacao_dados import (
-    VINCULOS, apelido_e_valido, vinculo_e_valido, gerar_apelido_padrao, normalizar_origem,
+    VINCULOS, FAIXAS_ETARIAS, apelido_e_valido, vinculo_e_valido, faixa_etaria_e_valida,
+    gerar_apelido_padrao, normalizar_origem,
 )
 from reutilizavel.perfil_jogador import calcular_perfil
 from reutilizavel.filtro_apelido import apelido_e_ofensivo
@@ -26,7 +27,15 @@ def index():
     if "origem" in request.args:
         session["origem"] = normalizar_origem(request.args["origem"])
 
-    return render_template("nome.html", vinculos=VINCULOS)
+    return mostrar_tela_inicial()
+
+
+# Tela inicial com as opções de perfil. Em caso de erro, recebe o que a pessoa já
+# tinha preenchido (apelido, vinculo, faixa_etaria, erro) para não perder nada.
+def mostrar_tela_inicial(**preenchido):
+    return render_template(
+        "nome.html", vinculos=VINCULOS, faixas_etarias=FAIXAS_ETARIAS, **preenchido
+    )
 
 
 @app.route("/ranking")
@@ -51,31 +60,27 @@ def jogar_novo():
 def comecar():
     apelido = request.form.get("apelido", "").strip()
     vinculo = request.form.get("vinculo", "")
+    faixa_etaria = request.form.get("faixa_etaria", "")
+    preenchido = {"apelido": apelido, "vinculo": vinculo, "faixa_etaria": faixa_etaria}
 
     if not apelido_e_valido(apelido):
-        return render_template(
-            "nome.html",
-            vinculos=VINCULOS,
-            apelido=apelido,
-            vinculo=vinculo,
+        return mostrar_tela_inicial(
             erro="Apelido inválido: use de 2 a 20 letras, números, espaço, _ - ou ponto.",
+            **preenchido,
         )
 
     if not vinculo_e_valido(vinculo):
-        return render_template(
-            "nome.html",
-            vinculos=VINCULOS,
-            apelido=apelido,
-            vinculo=vinculo,
-            erro="Escolha o seu vínculo para começar.",
-        )
+        return mostrar_tela_inicial(erro="Escolha o seu vínculo para começar.", **preenchido)
+
+    if not faixa_etaria_e_valida(faixa_etaria):
+        return mostrar_tela_inicial(erro="Escolha a sua faixa etária para começar.", **preenchido)
 
     # Apelido ofensivo não gera erro na tela: troca em silêncio pelo padrão
     if apelido == "" or apelido_e_ofensivo(apelido):
         apelido = gerar_apelido_padrao()
 
     nome = apelido
-    jogador = Jogador(nome, vinculo)
+    jogador = Jogador(nome, vinculo, faixa_etaria)
     jogador_id = jogador.salvar_novo_no_banco()
 
     session["jogador_id"] = jogador_id

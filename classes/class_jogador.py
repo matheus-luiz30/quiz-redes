@@ -3,9 +3,11 @@ import sqlite3
 from database.conexao import conectar
 
 class Jogador:
-    def __init__(self, nome, vinculo=None):
+    def __init__(self, nome, vinculo=None, faixa_etaria=None):
         self.nome = nome
-        self.vinculo = vinculo  # só o modo web preenche; terminal grava NULL
+        # só o modo web preenche; terminal grava NULL
+        self.vinculo = vinculo
+        self.faixa_etaria = faixa_etaria
 
     def salvar_no_banco(self):
         conexao = None
@@ -50,9 +52,9 @@ class Jogador:
             conexao = conectar()
             cursor = conexao.cursor()
             cursor.execute("""
-                INSERT INTO jogadores (nome, vinculo)
-                VALUES (?, ?)
-            """, (self.nome, self.vinculo))
+                INSERT INTO jogadores (nome, vinculo, faixa_etaria)
+                VALUES (?, ?, ?)
+            """, (self.nome, self.vinculo, self.faixa_etaria))
 
             conexao.commit()
             return cursor.lastrowid

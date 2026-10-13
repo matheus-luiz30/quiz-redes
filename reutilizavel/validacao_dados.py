@@ -42,10 +42,18 @@ def validar_resposta():
 # Modo web (público externo): código salvo no banco -> texto mostrado na tela.
 # Códigos curtos facilitam a análise estatística depois.
 VINCULOS = {
-    "estudante_ufsm": "Estudante UFSM",
-    "estudante_outra": "Estudante de outra instituição",
-    "profissional": "Profissional da área",
+    "estudante_redes_ti": "Estudante de Redes/TI",
+    "estudante_outro": "Estudante de outro curso",
+    "profissional_ti": "Profissional de TI",
     "outro": "Outro",
+}
+
+# menor_18 joga normalmente, mas fica fora dos CSVs da pesquisa (exportar_dados.py)
+FAIXAS_ETARIAS = {
+    "menor_18": "Menos de 18",
+    "18_24": "18–24",
+    "25_34": "25–34",
+    "35_mais": "35 ou mais",
 }
 
 
@@ -66,6 +74,10 @@ def apelido_e_valido(apelido):
 
 def vinculo_e_valido(vinculo):
     return vinculo in VINCULOS
+
+
+def faixa_etaria_e_valida(faixa_etaria):
+    return faixa_etaria in FAIXAS_ETARIAS
 
 
 # Origem do acesso (?origem=instagram, ?origem=qr_errc...). Aceita qualquer código
