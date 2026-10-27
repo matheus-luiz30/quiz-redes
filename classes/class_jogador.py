@@ -190,6 +190,31 @@ class Jogador:
             if conexao:
                 conexao.close()
 
+    # Respostas já gravadas de uma partida: [(pergunta_id, resposta_dada), ...]
+    @staticmethod
+    def buscar_respostas_da_partida(resultado_id):
+        conexao = None
+        try:
+            conexao = conectar()
+            cursor = conexao.cursor()
+            cursor.execute("""
+                SELECT pergunta_id, resposta_dada
+                FROM resultado_perguntas
+                WHERE resultado_id = ?
+            """, (resultado_id,))
+
+            return cursor.fetchall()
+
+        except Exception as erro:
+            print(f"Erro inesperado: {erro}")
+            return []
+
+        finally:
+            if conexao:
+                conexao.close()
+
+    # Devolve True só se a resposta foi gravada. False = essa pergunta já tinha
+    # resposta nesta partida (índice único + OR IGNORE: clique duplo) ou deu erro.
     @staticmethod
     def salvar_resposta(resultado_id, pergunta_id, resposta_dada, acertou, tempo_resposta):
         conexao = None
@@ -198,15 +223,17 @@ class Jogador:
             cursor = conexao.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
             cursor.execute("""
-                INSERT INTO resultado_perguntas
+                INSERT OR IGNORE INTO resultado_perguntas
                     (resultado_id, pergunta_id, resposta_dada, acertou, tempo_resposta, data_hora)
                 VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             """, (resultado_id, pergunta_id, resposta_dada, int(acertou), tempo_resposta))
 
             conexao.commit()
+            return cursor.rowcount == 1
 
         except Exception as erro:
             print(f"Erro inesperado: {erro}")
+            return False
 
         finally:
             if conexao:

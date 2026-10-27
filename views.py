@@ -181,9 +181,15 @@ def responder():
     comentario = motor.comentar_host(acertou)
 
     tempo_resposta = time.time() - session.get("inicio_pergunta", session["inicio_tempo"])
-    Jogador.salvar_resposta(
+    resposta_gravada = Jogador.salvar_resposta(
         session["resultado_id"], pergunta_atual.id, resposta_escolhida, acertou, tempo_resposta
     )
+
+    # Clique duplo: o 2º POST chega com o cookie antigo e passa pela checagem acima,
+    # mas o banco recusa a resposta repetida. Não soma nada de novo.
+    if not resposta_gravada:
+        ressincronizar_session(perguntas, indice)
+        return redirect(url_for("pergunta"))
 
     session["pontuacao"] += motor.pontuacao
     session["acertos"] += motor.acertos
@@ -203,3 +209,21 @@ def responder():
         pontuacao=session["pontuacao"],
         acertos=session["acertos"],
     )
+
+
+# Chamada quando a pergunta atual já tinha resposta no banco (clique duplo). O cookie
+# que o navegador guardar por último pode ser o do 2º POST, com o estado de antes da
+# resposta; se a session só "não avançasse", a pessoa ficaria presa nessa pergunta
+# (toda resposta seria recusada). O banco é a fonte da verdade: refaz pontuação e
+# acertos a partir das respostas gravadas e passa para a próxima pergunta.
+def ressincronizar_session(perguntas, indice):
+    perguntas_por_id = {pergunta.id: pergunta for pergunta in perguntas}
+    motor = MotorQuiz(Jogador(session["nome"]), perguntas)
+
+    for pergunta_id, resposta_dada in Jogador.buscar_respostas_da_partida(session["resultado_id"]):
+        if pergunta_id in perguntas_por_id:
+            motor.verificar_resposta(perguntas_por_id[pergunta_id], resposta_dada)
+
+    session["pontuacao"] = motor.pontuacao
+    session["acertos"] = motor.acertos
+    session["pergunta_atual"] = indice + 1

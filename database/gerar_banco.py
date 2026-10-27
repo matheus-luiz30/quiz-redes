@@ -83,5 +83,21 @@ def gerar_banco():
     adicionar_coluna_se_faltar(cursor, "resultado_perguntas", "resposta_dada", "TEXT")
     adicionar_coluna_se_faltar(cursor, "resultado_perguntas", "data_hora", "DATETIME")
 
+    # Uma resposta por pergunta em cada partida: barra o clique duplo em "Responder"
+    # (o 2º POST sai com o cookie antigo e passaria pela checagem de pergunta_id).
+    # Bancos antigos podem já ter duplicatas, e com elas o índice não seria criado:
+    # apaga antes, mantendo a primeira resposta gravada (menor id).
+    cursor.execute("""
+    DELETE FROM resultado_perguntas
+    WHERE id NOT IN (
+        SELECT MIN(id) FROM resultado_perguntas
+        GROUP BY resultado_id, pergunta_id
+    )
+    """)
+    cursor.execute("""
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_resposta_unica
+    ON resultado_perguntas (resultado_id, pergunta_id)
+    """)
+
     conexao.commit()
     conexao.close()
