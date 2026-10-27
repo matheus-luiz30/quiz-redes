@@ -1,0 +1,16 @@
+﻿enunciado;a;b;c;d;correta;categoria;dificuldade
+Qual equipamento distribui o sinal de Wi-Fi na sua casa e conecta seus aparelhos à internet?;Impressora;Roteador;Pen drive;Webcam;b;Internet e equipamentos;facil
+Como se chama uma rede que cobre uma área pequena, como uma casa, uma escola ou um laboratório?;LAN;WAN;Internet;DNS;a;Internet e equipamentos;facil
+Qual destas senhas é a mais segura?;123456;nomedocachorro;Tr3m!Azul#Chuva;senha2026;c;Segurança;facil
+Você recebe uma mensagem dizendo que ganhou um prêmio e pedindo para clicar num link e informar seus dados. Como se chama esse tipo de golpe?;Firewall;Backup;Download;Phishing;d;Segurança;facil
+O que indica o cadeado que aparece ao lado do endereço do site no navegador?;Que o site tem um antivírus que bloqueia golpes;Que os dados trocados com o site são criptografados;Que o site foi aprovado pelo governo como confiável;Que a página fica salva e abre mesmo sem internet;b;Segurança;facil
+Qual protocolo entrega automaticamente um endereço IP ao seu celular quando ele se conecta ao Wi-Fi?;DNS;DHCP;HTTPS;SMTP;b;Protocolos;medio
+Quando você digita o nome de um site, como www.ufsm.br, qual serviço descobre o endereço IP desse site?;HTTP;DHCP;DNS;FTP;c;Protocolos;medio
+O que o comando ping mede?;O tempo de ida e volta de um pacote até um destino;A velocidade de download da sua internet;A quantidade de aparelhos conectados na rede;A força do sinal do Wi-Fi no seu aparelho;a;Internet e equipamentos;medio
+O endereço 192.168.0.5 é um endereço:;Público, acessível de qualquer lugar da internet;Privado, usado apenas dentro de redes locais;Reservado para o roteador da rede;De loopback, que aponta para o próprio computador;b;Endereçamento IP;medio
+Qual é a porta padrão usada pelo protocolo HTTP, que carrega as páginas da web?;80;22;443;25;a;Protocolos;medio
+Qual destes é um endereço IPv4 válido?;256.10.0.1;192.168.1;192.168.1.10;10.0.0.300;c;Endereçamento IP;dificil
+No modelo TCP/IP, em qual camada fica o protocolo IP?;Aplicação;Transporte;Internet;Acesso à rede;c;Protocolos;dificil
+Qual é a principal diferença entre os protocolos TCP e UDP?;O UDP abre conexão e confirma a entrega, e o TCP não;O TCP é usado só em cabos, e o UDP só em redes sem fio;O TCP criptografa os dados, e o UDP envia tudo sem proteção;O TCP abre conexão e confirma a entrega, e o UDP não;d;Protocolos;dificil
+Quantos endereços podem ser usados por aparelhos numa rede /24?;24;256;255;254;d;Endereçamento IP;dificil
+O que o NAT faz em um roteador doméstico?;Permite que vários aparelhos com IP privado usem um único IP público;Entrega automaticamente um endereço IP para cada aparelho da rede;Traduz o nome dos sites para o endereço IP deles;Criptografa os dados que saem da sua rede para a internet;a;Endereçamento IP;dificil
